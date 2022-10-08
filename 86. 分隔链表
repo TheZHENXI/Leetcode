@@ -1,0 +1,38 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+struct ListNode* partition(struct ListNode* head, int x)
+{
+    //建立两个哨兵节点
+    struct ListNode* lesshead,*lesstail,*greaterhead,*greatertail;
+    lesshead = lesstail = (struct ListNode*)malloc(sizeof(struct ListNode));
+    lesshead->next = NULL;
+    greaterhead = greatertail = (struct ListNode*)malloc(sizeof(struct ListNode));
+    greaterhead->next =NULL;
+
+    struct ListNode* cur = head;
+    while(cur)
+    {
+        if(cur->val < x)
+        {
+            lesstail->next = cur;
+            lesstail = cur;
+        }
+        else
+        {
+            greatertail->next = cur;
+            greatertail = cur;
+        }
+        cur = cur->next;
+    }
+    lesstail->next = greaterhead->next;
+    greatertail->next = NULL;
+
+    return lesshead->next;
+}
