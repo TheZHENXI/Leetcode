@@ -1,0 +1,58 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* ReverseList(struct ListNode* pHead ) 
+{
+    struct ListNode* n1 = NULL;
+    struct ListNode* n2 = pHead;
+    struct ListNode* n3 = n2->next;
+    while(n2)
+    {
+        //翻转
+        n2->next = n1;
+        //迭代往后走
+        n1 = n2;
+        n2 = n3;
+        if(n3)
+        n3= n3->next; 
+    }
+    return n1;
+}
+
+struct ListNode* midfind(struct ListNode* head)
+{
+    struct ListNode* slow,*fast;
+    slow = fast = head;
+    while(fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+bool isPalindrome(struct ListNode* head)
+{
+    struct ListNode* mid = midfind(head);
+    struct ListNode* rhead = ReverseList(mid);
+    
+    struct ListNode* curA= head;
+    struct ListNode* curB= rhead;
+    while(curA && curB)
+    {
+        if(curA->val != curB->val)
+            return false;
+        curA = curA->next;
+        curB = curB->next;
+    }
+    return true;
+}
+
+作者：Zhang_Zhenxi
+链接：https://leetcode.cn/problems/palindrome-linked-list/solution/by-zhang_zhenxi-ac50/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
