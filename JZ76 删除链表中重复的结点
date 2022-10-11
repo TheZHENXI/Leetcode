@@ -1,0 +1,23 @@
+    //思路：此题与Leetcode的删除给定值的题类似(cur->next->val与给定值比较)，但此题cur->next->val的比较对象是cur->next->next->val.
+    if(pHead == NULL) return NULL;
+
+    struct ListNode* cphead = (struct ListNode*)malloc(sizeof(struct ListNode));
+    cphead->next = pHead;
+    struct ListNode* cur = cphead;
+    while(cur->next && cur->next->next)
+    {
+        if(cur->next->val == cur->next->next->val)
+        {
+            int tmp = cur->next->val;//全部删除tmp
+            while(cur->next && cur->next->val == tmp)
+            {
+                cur->next = cur->next->next;
+            }
+        }
+        else
+        {
+            cur = cur->next;
+        }
+    }
+    return cphead->next;
+}
