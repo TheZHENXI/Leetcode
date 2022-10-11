@@ -1,0 +1,40 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+struct ListNode* deleteDuplicates(struct ListNode* head)
+{
+    //思路1：一直将重复的删除
+    // struct ListNode* cur = head;
+    // struct ListNode* curafter = NULL;
+    // while(cur)
+    // {
+    //     curafter = cur->next;
+
+    //     while(curafter && curafter->val == cur->val)//直至找到不重复的
+    //         curafter = curafter->next;
+        
+    //     cur->next = curafter;
+    //     cur = curafter;
+    // }
+    // return head;
+    //思路2：一次删除一个
+    struct ListNode* cur = head;
+    while(cur && cur->next)
+    {
+        if(cur->val == cur->next->val)
+        {
+            cur->next = cur->next->next;
+        }
+        else
+        {
+            cur = cur->next;
+        }
+    }
+    return head;
+}
