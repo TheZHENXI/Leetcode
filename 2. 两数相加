@@ -1,2 +1,66 @@
-//1、迭代法
-//2、递归法
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+ //思路1：迭代法
+struct ListNode* BuyListNode(int x)
+{
+    struct ListNode* ret = (struct ListNode*)malloc(sizeof(struct ListNode));
+    ret->next = NULL;
+    ret->val = x;
+
+    return ret;
+}
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2)
+{
+    struct ListNode* phead = (struct ListNode*)malloc(sizeof(struct ListNode));
+    struct ListNode* cur = phead;
+    int total = 0;
+    int bit = 0;
+    while(l1 != NULL && l2 != NULL)
+    {
+        total = l1->val + l2->val + bit;
+        struct ListNode* newnode = BuyListNode(total%10);
+        bit = total/10;
+
+        cur->next = newnode;
+        cur = cur->next;
+        l1 = l1->next;
+        l2 = l2->next;
+    }
+    //第一个While结束时，l1不为空
+    while(l1 != NULL)
+    {
+        total = l1->val + bit;
+        struct ListNode* newnode = BuyListNode(total%10);
+        bit = total/10;
+
+        cur->next = newnode;
+        cur = cur->next;
+        l1 = l1->next;
+    }
+    //第一个While结束时，l2不为空
+    while(l2 != NULL)
+    {
+        total = l2->val + bit;
+        struct ListNode* newnode = BuyListNode(total%10);
+        bit = total/10;
+
+        cur->next = newnode;
+        cur = cur->next;
+        l2 = l2->next;
+    }
+    //所有计算完毕后 bit仍不为0的话
+    if(bit != 0)
+    {
+        struct ListNode* newnode = BuyListNode(bit);
+        cur->next = newnode;
+    }
+
+    return phead->next;
+}
+//思路2：递归
