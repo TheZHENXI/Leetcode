@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <assert.h>
+
+typedef char StackDataType;
+typedef struct stack
+{
+    StackDataType* data;
+    int top;
+    int capacity;
+}ST;
+void StackInit(ST* ps);
+void StackDestroy(ST* ps);
+void StackPush(ST* ps,StackDataType x);
+void StackPop(ST* ps);
+StackDataType StackTop(ST* ps);
+int StackSize(ST* ps);
+bool StackEmpty(ST* ps);
+/***********************************************************/
+void StackInit(ST* ps)
+{
+    assert(ps);
+    ps->data = (StackDataType*)malloc(sizeof(StackDataType)*10000);
+    ps->capacity = 10000;
+    ps->top = 0;
+}
+void StackDestroy(ST* ps)
+{
+    assert(ps);
+    free(ps->data);
+    ps->data = NULL;
+    ps->capacity = 0;
+    ps->top = 0;
+}
+void StackPush(ST* ps,StackDataType x)
+{
+    assert(ps);
+
+    ps->data[ps->top] = x;
+    ps->top++;
+}
+void StackPop(ST* ps)
+{
+    assert(ps);
+    assert(!StackEmpty(ps));
+
+    ps->top--;
+}
+StackDataType StackTop(ST* ps)
+{
+    assert(ps);
+    assert(!StackEmpty(ps));
+
+    return ps->data[ps->top-1];
+}
+int StackSize(ST* ps)
+{
+    assert(ps);
+
+    return ps->top;
+}
+bool StackEmpty(ST* ps)
+{
+    return ps->top == 0;
+}
+/*******************************/
+bool isValid(char * s)
+{
+    if(s == NULL) 
+        return true;
+    ST stack;
+    StackInit(&stack);
+    int i = 0;
+    while(s[i])
+    {
+        if(s[i] == '(' || s[i] == '{' || s[i] == '[')//左符号就入栈
+        {
+            StackPush(&stack,s[i]);
+        }
+        else
+        {   
+            if(StackEmpty(&stack))//是右符号但是栈为空
+                return false;
+            else
+            {
+                if(StackTop(&stack) == '(' && s[i] == ')'
+                || StackTop(&stack) == '{' && s[i] == '}'
+                || StackTop(&stack) == '[' && s[i] == ']')
+                {
+                    StackPop(&stack);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        i++;
+    }
+    //防止单身狗的出现，如：(){}[
+    if(StackEmpty(&stack))
+        return true;
+    else
+        return false;
+}
