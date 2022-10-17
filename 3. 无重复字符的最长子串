@@ -1,0 +1,32 @@
+int max(int x,int y)
+{
+    if(x>y)
+    {
+        return x;
+    }
+    else
+    {
+        return y;
+    }
+}
+
+int lengthOfLongestSubstring(char * s)
+{
+    int maxLen = 0;//最大子串长度
+    int left = 0;
+    int right = 0;
+    int* hash = (int*)calloc(128,sizeof(int));//记录字符的的索引号
+    for(int i = 0;i < 128;i++)
+    {
+        hash[i] = -1;
+    }
+
+    while(s[right])
+    {
+        left = max(left,hash[s[right]] + 1);//更新窗口的左边界，将left更新到上次出现的位置之后；加max是为了排除窗口左侧的干扰
+        maxLen = max(maxLen,right - left +1);//更新窗口最大值
+        hash[s[right]] = right;
+        right++;
+    }
+    return maxLen;
+}
