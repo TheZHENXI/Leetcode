@@ -1,0 +1,15 @@
+bool isSameTree(struct TreeNode* p, struct TreeNode* q)
+{
+    //判断结构是否一致
+    if(p == NULL && q ==NULL) 
+        return true;
+    if(p == NULL && q != NULL)
+        return false;
+    if(p != NULL && q == NULL)
+        return false;
+    //判断值
+    if(p->val != q->val)
+        return false;
+    //判断左右节点的值
+    return isSameTree(p->left,q->left)&&isSameTree(p->right,q->right);
+}
