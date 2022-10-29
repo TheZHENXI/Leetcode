@@ -1,0 +1,45 @@
+
+int cmpfunc (const void * a, const void * b)
+{
+   return ( *(int*)a - *(int*)b );
+}
+
+//思路：枚举+双指针
+int threeSumClosest(int* nums, int numsSize, int target)
+{
+    qsort(nums,numsSize,sizeof(int),cmpfunc);
+    int ret =  nums[0] + nums[1] + nums[2];//3
+    int MinDistance = abs(target - ret);//0
+    for(int i = 0;i < numsSize;i++)
+    {
+		if(i > 0 && nums[i] == nums[i-1]) continue;//去除第一个数的重复值
+
+        int _target = target - nums[i];//3
+        int l = i + 1,r = numsSize - 1;//1 2
+        while(l < r)
+        {
+            if(abs(_target - nums[l]- nums[r]) < MinDistance)
+            {            
+                MinDistance = abs(_target - nums[l]- nums[r]);
+                //与三数之和不同的是，l 和 r 不能去重，会导致最近值出错
+                // while(l < r && nums[l] == nums[l+1]) l++;
+                // while(l < r && nums[r] == nums[r-1]) r--;
+                ret = nums[i] + nums[l] + nums[r];
+            }
+            if(nums[i]+nums[l]+nums[r] > target)
+            {
+                r--;
+            }
+            else
+            {
+                l++;
+            }
+        }
+    }
+    return ret;
+}
+
+作者：小呀小菜鸟
+链接：https://leetcode.cn/problems/3sum-closest/solutions/1935367/by-zhang_zhenxi-pxa0/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
