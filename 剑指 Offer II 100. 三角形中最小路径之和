@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) 
+    {
+        //时间复杂度：O(n^2),空间复杂度：O(n^2)  n为行数
+        //推荐思路1：自底向上，不用考虑左右边界问题
+        //状态定义：F(i,j)表示从[i,j]处到底的最小路径和
+        //初始化：最后一行赋于定义的数组,F(row-1,j) = triangle[row-1][j]
+        vector<vector<int>> minimumTotal(triangle);//拷贝了一份原始数组建立minimumTotal
+        int row = triangle.size();
+        for(int i = row-2;i >= 0;i--)
+        {   
+            for(int j = 0;j <= i;j++)
+            {
+                //状态转移方程F(i,j) : min(F(i+1,j),F(i+1,j+1)) + array[i][j]
+                minimumTotal[i][j] = min(minimumTotal[i+1][j],minimumTotal[i+1][j+1]) + triangle[i][j];
+            }
+        }
+        //返回结果：F(0,0)
+        return minimumTotal[0][0];
+
+        //思路2：自顶向下
+        //状态定义：F(i,j)表示从[0,0]到[i,j]处的最小路径和
+        //初始化：将第一行赋于定义的数组F(0,0) = triangle[0][0]
+        // vector<vector<int>> minimumTotal(triangle);
+        // int row = triangle.size();
+        // for(int i = 1;i < row;i++)
+        // {
+        //     for(int j = 0;j <= i;j++)
+        //     {     
+        //         //状态转移方程：3种情况：第0列，第i列，中间点,因为0列和i列只能从一路径而来    
+        //         if(j == 0)     //F(0,j)
+        //             minimumTotal[i][j] = minimumTotal[i-1][j]   + triangle[i][j];
+        //         else if(i == j)//F(i,i)
+        //             minimumTotal[i][j] = minimumTotal[i-1][j-1] + triangle[i][j];
+        //         else           //F(i,j)
+        //             minimumTotal[i][j] = min(minimumTotal[i-1][j],minimumTotal[i-1][j-1]) + triangle[i][j];
+        //     }
+        // }
+        // //返回结果：min(F(row-1,j)),最后一行中的最小值
+        // int ret = minimumTotal[row-1][0];
+        // for(int i = 1;i < row;i++)
+        // {
+        //     ret = min(ret,minimumTotal[row-1][i]);
+        // }
+        // return ret;
+    }
+};
