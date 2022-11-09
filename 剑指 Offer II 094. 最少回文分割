@@ -1,0 +1,70 @@
+class Solution {
+public:
+    //回文串判断1
+    vector<vector<bool>> isPal(string s)
+    {
+        //状态定义：F(i,j) 区间[i,j]的字符是否为回文串
+        int len = s.size();
+        //初始化
+        vector<vector<bool>> Mat(len,vector<bool>(len,false));
+
+        for(int i= len-1;i >= 0;i--)//为何要自底向上?由于状态转移方程需要用到F(i+1,j-1) 就是下一行值
+        {
+            for(int j = i;j < len;j++)
+            {
+                //状态转移方程：三种情况
+                //单字符区间
+                if(i == j)
+                    Mat[i][j] = true;
+                else if(i+1 == j)//双字符区间:s[i+1] == s[j]
+                    Mat[i][j] = (s[i] == s[j]);
+                else //多字符：F(i,j) = s[i]== s[j] && F(i+1,j-1) 
+                {
+                    Mat[i][j] = (s[i] == s[j] && Mat[i+1][j-1]);
+                }
+            }
+        }
+        return Mat;
+    }
+    //回文串判断2
+    bool isPal(string s,int start,int end)
+    {
+        while(start < end)
+        {
+            if(s[start] != s[end])
+                return false;
+            else
+            {
+                start++;
+                end--;
+            }
+        }
+        cout << "1" << endl;
+        return true;
+    }    
+    //时间复杂度：O(n^3) 空间复杂度：O(n)；会超时
+    int minCut(string s) {
+        vector<vector<bool>> Mat = isPal(s);
+        //状态定义：F(i) 前i个字符的最少分割次数
+        int len = s.size();
+        vector<int> minC(len + 1);
+        //初始化:最大分割次数为长度减去1 F(i) = i-1
+        for(int i = 0;i <= len;i++)
+        {
+            minC[i] = i - 1;
+        }
+        for(int i = 1;i <= len;i++)
+        {
+            for(int j = 0;j < i;j++)//遍历i前面的所有状态
+            {
+                if(Mat[j][i-1])//注意这里的i不是索引号，是前i个字符。所以要i-1
+                {
+                    //j < i && [j+1,i]为回文串的前提下：min[i] :min(F(i),F(j)+1)
+                    minC[i] = min(minC[i],minC[j]+1);
+                }
+            }
+        }
+        //返回结果F(len)
+        return minC[len];
+    }
+};
