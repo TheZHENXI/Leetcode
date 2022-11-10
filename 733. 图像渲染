@@ -1,0 +1,38 @@
+class Solution 
+{
+public:
+    //                  上     下    左     右
+    int nextP[4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
+    void dfs(vector<vector<int>>& image, int curSr, int curSc,int row,int col,
+             vector<vector<int>>& book,int oldcolor,int newcolor)
+    {
+        image[curSr][curSc] = newcolor;//给当前位置染色
+        book[curSr][curSc] = 1;        //染过色的进行标记
+        for(int i = 0;i < 4;i++)//搜索上下左右
+        {
+            int newSr = curSr + nextP[i][0];
+            int newSc = curSc + nextP[i][1];
+            //越界判断
+            if(newSr >= row || newSr < 0 
+            || newSc >= col || newSc < 0)
+                continue;
+            //判断是否需要渲染
+            if(image[newSr][newSc] == oldcolor && book[newSr][newSc] == 0)
+            {
+                dfs(image,newSr,newSc,row,col,book,oldcolor,newcolor);
+            }
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newcolor) 
+    {
+        if(image.empty()) return image;
+        int row = image.size();
+        int col = image[0].size();
+        int oldcolor = image[sr][sc];
+        vector<vector<int>> book(row,vector<int>(col,0));
+        dfs(image,sr,sc,row,col,book,oldcolor,newcolor);
+
+        return image;
+    }
+
+};
