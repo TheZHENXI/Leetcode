@@ -1,0 +1,32 @@
+/*
+// Definition for Employee.
+class Employee {
+public:
+    int id;
+    int importance;
+    vector<int> subordinates;
+};
+*/
+
+class Solution {
+public:
+    //dfs：计算员工的重要度
+    int dfs(unordered_map<int,Employee*> Info,int curId)
+    {
+        //计
+        int sum = Info[curId]->importance;
+
+        for(int subID:Info[curId]->subordinates)
+        {
+            sum += dfs(Info,subID);
+        }
+        return sum;
+    }
+    int getImportance(vector<Employee*> employees, int id) 
+    {
+        unordered_map<int,Employee*> Info;
+        for(Employee* e:employees)
+            Info[e->id] = e;
+        return dfs(Info,id);
+    }
+};
