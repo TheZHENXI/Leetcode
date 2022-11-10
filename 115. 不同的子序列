@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int numDistinct(string s, string t) 
+    {
+        //状态定义：F(i,j) s的前i个字符与t的前j个字符相同的子序列个数
+        int m = s.size();
+        int n = t.size();
+        //初始化：F(i,0) = 1  F(0,j) = 0
+        vector<vector<unsigned long long>> num(m+1,vector<unsigned long long>(n+1,0));
+        for(int i = 0;i <= m;i++)
+        {
+            num[i][0] = 1;
+        }
+        for(int i = 1;i <= m;i++)
+        {
+            for(int j = 1;j <= n;j++)
+            {
+                //状态转移方程
+                //注意这里的i,j不是索引号
+                if(s[i-1] == t[j-1])//相等：考虑使用s[i] + 不使用s[i]
+                {
+                    //F(i,j) = F(i-1,j-1) + F(i-1,j)
+                    num[i][j] = num[i-1][j-1] + num[i-1][j];
+                }
+                else//不相等：退化，s[i]直接无法使用
+                {
+                    num[i][j] = num[i-1][j];
+                }
+            }
+        }
+        return num[m][n];
+    }
+};
