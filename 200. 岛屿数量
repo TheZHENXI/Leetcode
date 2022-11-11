@@ -1,0 +1,49 @@
+
+int nextP[4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
+class Solution {
+public:
+    //搜索1
+    void dfs(vector<vector<char>>& grid,vector<vector<int>>& visted,int row,int col,int curX,int curY)
+    {
+        //标记当前的位置
+        visted[curX][curY] = 1;
+        //搜索当前位置的上下左右
+        for(int i = 0;i < 4;i++)
+        {
+
+            int newX = curX + nextP[i][0];
+            int newY = curY + nextP[i][1];
+
+            if(newX >= row || newX < 0
+            || newY >= col || newY < 0)
+                continue;
+            //是陆地，而且没有访问过，在进行访问
+            if(grid[newX][newY] == '1' && visted[newX][newY] == 0)
+            {
+                dfs(grid,visted,row,col,newX,newY);
+            }
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) 
+    {
+        if(grid.empty())
+            return 0;
+        int row = grid.size();
+        int col = grid[0].size();
+        vector<vector<int>> visted(row,vector<int>(col,0));
+        int number = 0;
+        //遍历每一个点，得到遍历的次数
+        for(int i = 0;i <row;i++)
+        {
+            for(int j = 0;j < col;j++)
+            {
+                if(grid[i][j] == '1' && visted[i][j] == 0)
+                {
+                    number++;
+                    dfs(grid,visted,row,col,i,j);
+                }
+            }
+        }
+        return number;
+    }
+};
