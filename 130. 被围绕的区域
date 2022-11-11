@@ -1,0 +1,58 @@
+int nextP[4][2] =  {{-1,0},{1,0},{0,-1},{0,1}};
+class Solution {
+public:
+    //将边上和与边上相连的“O” 改为 “#”
+    void dfs(vector<vector<char>>& board,int row,int col,int curX,int curY)
+    {
+        //将目前位置的“O”改为“#”
+        board[curX][curY] = '#';
+        //搜索当前位置的上下左右
+        for(int i = 0;i < 4;i++)
+        {
+            //更新位置
+            int newX = curX + nextP[i][0];
+            int newY = curY + nextP[i][1];
+            //越界判断
+            if(newX >= row || newX < 0
+            || newY >= col || newY < 0)
+                continue;
+            //看是否需要修改
+            if(board[newX][newY] == 'O')
+                dfs(board,row,col,newX,newY);
+        }
+    }
+    void solve(vector<vector<char>>& board) 
+    {
+        if(board.empty())
+            return;
+        int row = board.size();
+        int col = board[0].size();
+        //对第一行和最后一行修改
+        for(int j = 0;j < col;j++)
+        {
+            if(board[0][j] == 'O')
+                dfs(board,row,col,0,j);
+            if(board[row-1][j] == 'O')
+                dfs(board,row,col,row-1,j);
+        }
+        //对第一列和最后一列修改
+        for(int i = 1;i < row - 1;i++)
+        {
+            if(board[i][0] == 'O')
+                dfs(board,row,col,i,0);
+            if(board[i][col-1] == 'O')
+                dfs(board,row,col,i,col-1);
+        }
+        //遍历board,将还是‘O’的修改,将‘#’修改会‘O’
+        for(int i = 0;i < row;i++)
+        {
+            for(int j = 0;j < col;j++)
+            {
+                if(board[i][j] == 'O')
+                    board[i][j] = 'X';
+                if(board[i][j] == '#')
+                    board[i][j] = 'O';
+            }
+        }
+    }
+};
