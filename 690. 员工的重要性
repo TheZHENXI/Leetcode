@@ -11,22 +11,47 @@ public:
 class Solution {
 public:
     //dfs：计算员工的重要度
-    int dfs(unordered_map<int,Employee*> Info,int curId)
-    {
-        //计
-        int sum = Info[curId]->importance;
+    // int dfs(unordered_map<int,Employee*> Info,int curId)
+    // {
+    //     //计
+    //     int sum = Info[curId]->importance;
 
-        for(int subID:Info[curId]->subordinates)
-        {
-            sum += dfs(Info,subID);
-        }
-        return sum;
-    }
+    //     for(int subID:Info[curId]->subordinates)
+    //     {
+    //         sum += dfs(Info,subID);
+    //     }
+    //     return sum;
+    // }
+    // int getImportance(vector<Employee*> employees, int id) 
+    // {
+    //     unordered_map<int,Employee*> Info;
+    //     for(Employee* e:employees)
+    //         Info[e->id] = e;
+    //     return dfs(Info,id);
+    // }
+    //BFS
     int getImportance(vector<Employee*> employees, int id) 
     {
         unordered_map<int,Employee*> Info;
         for(Employee* e:employees)
             Info[e->id] = e;
-        return dfs(Info,id);
+        //建立队列
+        queue<int> q;
+        int sum = 0;
+        //将当前员工入队
+        q.push(id);
+        //遍历队列
+        while(!q.empty())
+        {
+            //获取头元素
+            int curId = q.front();
+            q.pop();
+            //求员工总价值
+            sum += Info[curId]->importance;
+            //将当前员工的下属入队
+            for(int id:Info[curId]->subordinates)
+                q.push(id);
+        }
+        return sum;
     }
 };
