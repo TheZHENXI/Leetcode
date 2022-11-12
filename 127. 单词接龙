@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) 
+    {
+        if(wordList.empty())
+            return 0;
+
+        //将字典存到hash表中
+        unordered_set<string> WordDict;
+        for(string wd: wordList)
+            WordDict.insert(wd);
+
+        //记录被访问过的
+        unordered_set<string> visited;
+
+        //如果字典中没有endword
+        if(WordDict.find(endWord) == WordDict.end())
+            return 0;
+
+        //起始单词入队
+        int step = 1; //起始就算1
+        queue<string> q;
+        q.push(beginWord);
+        visited.insert(beginWord);
+        //遍历队列
+        while(!q.empty())
+        {
+            //获取队列中字符串的个数    hit  -->  hot -->  dot  lot --> dog   log -->cog
+            int size = q.size();
+            //依次改变当前字符串的每一个字符，对照字典寻找
+            while(size--)
+            {
+                //获取头元素
+                string curStr = q.front();
+                q.pop();
+                //搜索当前字符串所有可能的变化结果 hit 分别只变h、i、t ,每个变化有26种可能
+                int curLen = curStr.length();
+                for(int i = 0;i < curLen;i++)
+                {
+                    string newStr = curStr;
+                    for(char ch = 'a';ch <= 'z';ch++)
+                    {
+                        newStr[i] = ch; //新字符串
+                        //对比是否是想要的
+                        if(newStr == endWord)
+                            return step + 1; //由于最后一次遍历没有加上去，所以在结果上+1
+                        //为字典内的，且没有访问过，存入队列、标记
+                        if(WordDict.find(newStr) != WordDict.end()
+                        && visited.find(newStr) == visited.end())
+                        {
+                            q.push(newStr);
+                            visited.insert(newStr);
+                        }
+                    }
+                }
+            }
+            step++;
+        }
+        return 0;
+    }
+};
