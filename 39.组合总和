@@ -1,0 +1,35 @@
+class Solution {
+public:
+    //Solutions：存放所有的路径  |  Solution：存放当前路径  |curIdx 遍历数组变量
+    void dfs(vector<vector<int>>& Solutions,vector<int>& Solution,
+    vector<int>& candidates,int target,int curSum,int curIdx)
+    {
+        //边界处理
+        if(curSum == target)
+        {
+            Solutions.push_back(Solution);//将次路径存入返回数组中
+            return;
+        }
+        if(curSum > target)
+            return;
+        //尝试每一种可能
+        for(int i = curIdx;i < candidates.size();i++)
+        {
+            //处理当前位置
+            Solution.push_back(candidates[i]);
+            //确定一种可能后，继续下一步
+            dfs(Solutions,Solution,candidates,target,curSum+candidates[i],i);
+            //回溯：将一种解的元素，pop出一个
+            Solution.pop_back();
+        }
+    }
+    
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
+    {
+        vector<vector<int>> Solutions;
+        vector<int> Solution;
+        dfs(Solutions,Solution,candidates,target,0,0);
+
+        return Solutions;
+    }
+};
