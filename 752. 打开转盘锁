@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) 
+    {
+        //将死亡数组 放入hash表中
+        unordered_set<string> DeadDict;
+        for(string str:deadends)
+        {
+            DeadDict.insert(str);
+        }
+        //用来标记已尝试过得串
+        unordered_set<string> visited;
+        //起始点在死亡数组
+        if(DeadDict.find("0000") != DeadDict.end())
+            return -1;
+        //初始化队列
+        queue<string> q;
+        q.push("0000");
+        int step = 0;
+        while(!q.empty())
+        {
+            //同一次操作后得到的所有符合的结果
+            int size = q.size();
+            //将队列的中同层的结果全部取出来
+            while(size--)
+            {
+                //取出头元素
+                string curStr = q.front();
+                q.pop();
+                //与target对比
+                if(curStr == target)
+                    return step;
+                //不是targrt，搜素当前串的所有变化可能
+                for(int i = 0;i < 4;i++)
+                {
+                    string newStr1 = curStr,newStr2 = curStr;
+                    //向上拨+1
+                    newStr1[i] = newStr1[i] == '9' ? '0':newStr1[i]+1;
+                    //向下拨-1
+                    newStr2[i] = newStr2[i] == '0' ? '9':newStr2[i]-1;
+                    //新字符串1在不在死亡数组 且 没有访问过，入队、存入visited
+                    if(DeadDict.find(newStr1) == DeadDict.end()
+                    && visited.find(newStr1) == visited.end())
+                    {
+                        q.push(newStr1);
+                        visited.insert(newStr1);
+                    }
+                    //新字符串2在不在死亡数组 且 没有访问过，入队、存入visited
+                    if(DeadDict.find(newStr2) == DeadDict.end()
+                    && visited.find(newStr2) == visited.end())
+                    {
+                        q.push(newStr2);
+                        visited.insert(newStr2);
+                    }
+                        
+                }
+            }
+            step++;
+        }
+        return -1;
+    }
+};
