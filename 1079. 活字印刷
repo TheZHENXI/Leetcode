@@ -1,0 +1,33 @@
+class Solution {
+public:
+    //思路：将每一个字符分开，然后去组合
+    void dfs(string tiles,unordered_set<string>& Solutions,
+    vector<int>& visited,string curStr)
+    {
+        //边界处理
+        if(!curStr.empty())
+        {
+            Solutions.insert(curStr);
+        }
+        //搜索每一种可能
+        for(int i = 0;i < tiles.size();i++)//此处没用curIdex，因为此处可以向前看
+        {
+            if(visited[i] == 0)
+            {
+                //拿当前元素去组合
+                visited[i] = 1;
+                dfs(tiles,Solutions,visited,curStr + tiles[i]);
+                //回溯
+                visited[i] = 0;
+            }
+        }
+    }
+    int numTilePossibilities(string tiles) 
+    {
+        unordered_set<string> Solutions;
+        vector<int> visited(tiles.size(),0);
+        dfs(tiles,Solutions,visited,"");
+
+        return Solutions.size();
+    }
+};
