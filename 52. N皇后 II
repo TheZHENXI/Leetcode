@@ -1,0 +1,47 @@
+class Solution {
+public:
+    void dfs(vector<vector<pair<int,int>>>& Solutions,vector<pair<int,int>>& Solution,
+    int curRow,int n)
+    {
+        //边界处理
+        if(curRow == n)
+        {
+            Solutions.push_back(Solution);
+            return;
+        }
+        //行已经在形参中控制,去搜索每一列
+        for(int j = 0;j < n;j++)
+        {
+            if(isValid(Solution,curRow,j))
+            {
+                 //将皇后位置存入一种解法中，并去寻找下一个皇后的位置
+                Solution.push_back(make_pair(curRow,j));
+                dfs(Solutions,Solution,curRow+1,n);
+                //回溯
+                Solution.pop_back();
+            }
+        }
+    }
+    
+   int totalNQueens(int n)
+    {
+        vector<vector<pair<int,int>>> Solutions;
+        vector<pair<int,int>> Solution;
+        dfs(Solutions,Solution,0,n);
+
+        return Solutions.size();
+    }
+
+    bool isValid(vector<pair<int,int>>& Solution,int curRow,int curCol)
+    {
+        for(pair<int,int> pos:Solution)
+        {
+            //和已存在的皇后同列或者在同一斜线
+            if(pos.second == curCol 
+            || pos.first + pos.second == curRow + curCol
+            || pos.first - pos.second == curRow - curCol)
+                return false;
+        }
+        return true;
+    }
+};
