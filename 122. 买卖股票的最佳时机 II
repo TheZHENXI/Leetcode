@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        //状态定义：F(i,0) 第i天交易完成后手里没股票的最大利润
+        //         F(i,1) 第i天交易完成后手里有股票的最大利润
+        //F(0,0) = 0          F(0,1)
+        int day = prices.size();
+        vector<vector<int>> maxPro(day+1,vector<int>(2,0));
+        maxPro[0][0] = 0;
+        maxPro[0][1] = -prices[0];
+
+        for(int i = 1;i <= day;i++)//i不是下标,表示的第i天
+        {
+            //前一天本就没买 或者 可能是当天卖出，F(i,0) = max(F(i-1,0),F(i-1,1)+prices[i-1])
+            maxPro[i][0] = max(maxPro[i-1][0],maxPro[i-1][1] + prices[i-1]);
+            //前一天本就有   或则 可能是当天买入
+            maxPro[i][1] = max(maxPro[i-1][1],maxPro[i-1][0] - prices[i-1]);
+        }
+        return maxPro[day][0];
+    }
+};
