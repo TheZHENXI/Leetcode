@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool isPalindrome(string s) 
+    {
+        /*思路1：双指针 时间复杂度：O(n)  空间复杂度：O(1)
+        int len = s.length();
+        int left = 0,right = len - 1;
+        while(left < right)
+        {
+            // //大写变小写
+            // if(s[left] >= 'A' && s[left] <= 'Z')
+            //     s[left]  += 32;
+            // if(s[right] >= 'A' && s[right] <= 'Z')
+            //     s[right] += 32;
+            //跳过非字母数字字符
+            if(!isalnum(s[left]))
+            {
+                left++;
+                continue;
+            }
+            if(!isalnum(s[right]))
+            {
+                right--;
+                continue;
+            }
+            //判断回文
+            if(tolower(s[left]) == tolower(s[right]))
+                left++;right--;
+            else
+                return false;
+        }
+        return true;
+        */
+        //思路2：reverse  时间复杂度：O(n)  空间复杂度：O(n)
+        string newStr;
+        for(char ch:s)
+        {
+            if(isalnum(ch))
+            {
+                newStr += ch;
+            }
+        }
+        string reStr = newStr;
+        reverse(newStr.begin(),newStr.end());
+        return reStr == newStr;
+    }
+};
