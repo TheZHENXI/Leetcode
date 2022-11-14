@@ -1,0 +1,58 @@
+int nextP[4][2] =  {{-1,0},{1,0},{0,-1},{0,1}};
+class Solution {
+public:
+    //                                               nextIdx 遍历字符串word
+    void dfs(vector<vector<char>>& board, string word,int nextIdx,vector<vector<int>>& visited
+            ,int row,int col,int curX,int curY,int& flag)
+    {
+        //边界处理
+        if(nextIdx == word.size())
+        {
+            flag = 1;
+            return;
+        } 
+        //处理当前位置
+        for(int i = 0;i < 4;i++)
+        {
+            //更新位置
+            int newX = curX + nextP[i][0];
+            int newY = curY + nextP[i][1];
+            //越界判断
+            if(newX >= row || newX < 0
+            || newY >= col || newY < 0)
+                continue;
+            //borad中的下一个字符与word的下个字符相同，而且没访问过，再去dfs
+            if(word[nextIdx] == board[newX][newY] && visited[newX][newY] == 0)
+            { 
+                visited[curX][curY] = 1;
+                dfs(board,word,nextIdx+1,visited,row,col,newX,newY,flag);
+                visited[curX][curY] = 0;
+            }
+        }
+    }
+
+    bool exist(vector<vector<char>>& board, string word) 
+    {
+        if(board.empty())
+            return false;
+        int row = board.size();
+        int col = board[0].size();
+        int flag = 0;
+        //标记已经访问过得字符
+        vector<vector<int>> visited(row,vector<int>(col,0));
+        for(int i = 0;i < row;i++)
+        {
+            for(int j = 0;j < col;j++)
+            {
+                if(board[i][j] == word[0])
+                {
+                    dfs(board,word,1,visited,row,col,i,j,flag);
+
+                    if(flag == 1)   
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+};
