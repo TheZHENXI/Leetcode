@@ -1,0 +1,24 @@
+class Solution {
+public:
+
+    int findNthDigit(int n) {
+        //分析：n最大处于一个9位数中，最小在一个1位数中
+        int d = 1, count = 9;
+        //n减去前面无用的位，并确定在d位数中
+        while(n > (long) d*count)
+        {
+            n -= d*count;
+            d++;
+            count *= 10;
+        }
+        n--;
+        //复原该数字
+        int number = pow(10,d-1) + n / d;
+        //计算第n位处在该数字的第几位
+        int bitIndex = n % d;
+        //获取numbe的第bitIndex位
+        int ret =  number /(int) pow(10,d-bitIndex-1) %10;
+
+        return ret;
+    }
+};
