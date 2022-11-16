@@ -1,0 +1,32 @@
+class Solution {
+public:
+    double myPow(double x, int n) 
+    {
+        //x^13 = x^1101 = x^(2^0*1 + 2^1*0 + 2^2*1 + 2^3*1)
+        //     = (x)^1 * (x^2)^0 * (x^4)^1 * (x^8)^1    
+        if(n == 0) 
+            return 1;  
+        //针对n = -2^31这种特殊情况，在取反后int存放不了
+        long long N = n;
+        //将n < 0 转换为(1/x)^(-n)
+        if(N < 0)
+        {
+            x = 1/x;
+            N =  (-1)*N;
+        }
+        double ret = 1.0000;
+        while(N > 0)
+        {
+            //指数：为1 乘进去，为0，不乘
+            if(N & 1)
+            {
+                ret *= x;
+            }
+            //底数为上次的平方
+            x *= x;
+            //n更新到二进制下一位
+            N = N >> 1;
+        }
+        return ret;
+    }
+};
