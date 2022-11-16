@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//时间复杂度：O(),空间复杂度O(logn)
+class Solution {
+public:
+    //left,right 标记前序的区间，left1，right1标记中序的区间
+    TreeNode* dfs(vector<int>& preorder, vector<int>& inorder,int Pre_left,int Pre_right
+            ,int In_left,int In_right)
+    {
+        //前序 ：[3],[9,2],[20,15,7]  第一个为根节点
+        //中序 ：[2,9],[3],[15,20,7]
+        //          count指向中序的根节点位置
+        //边界处理   不能等于，等于时相当于有一个节点，需要去处理
+        if(Pre_left > Pre_right || In_left > In_right)
+            return nullptr;
+
+        //当前位置处理
+        int value = preorder[Pre_left];
+        TreeNode* node = new TreeNode(value);
+        
+        //定位左子树、右子树的的数组范围
+        int count = 0;
+        while(inorder[In_left + count] != value)
+        {
+            count++;
+        }
+
+        //左子树dfs 
+        node->left = dfs(preorder,inorder,Pre_left+1,Pre_left+count,In_left,In_left+count-1);
+        //右子树dfs
+        node->right = dfs(preorder,inorder,Pre_left+count+1,Pre_right,In_left+count+1,In_right);
+
+        return node;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) 
+    {
+        return dfs(preorder,inorder,0,preorder.size()-1,0,inorder.size());
+    }
+};
