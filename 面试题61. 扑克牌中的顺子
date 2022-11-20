@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool isStraight(vector<int>& nums) 
+    {
+        //将nums数组排序
+        sort(nums.begin(),nums.end());
+        //统计癞子的个数
+        int cnt = 0;
+        for(int a:nums)
+        {
+            if(a == 0)
+                cnt++;
+            else
+                break;
+        }
+        //看在0之后是否有重复元素，有false
+        int len = nums.size();
+        for(int i = cnt;i < len-1;i++)
+        {
+            if(nums[i+1] == nums[i])
+                return false;
+            else//计算有几个空缺，并用癞子来填补
+                cnt -= nums[i+1] - nums[i] - 1;
+        }
+        //癞子正好够用或者多出 ，则为true
+        return cnt >= 0;
+    }
+};
