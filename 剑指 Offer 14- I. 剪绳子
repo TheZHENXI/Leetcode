@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int cuttingRope(int n) 
+    {
+        //状态定义：F(i) = max{j*(i-j),j*f(i-j)}，将长度i拆分为拆分为j，j-i时的最大乘积
+        //初始化
+        vector<int> dp(n+1,0);
+        for(int i = 2;i <= n;i++)
+        {
+            for(int j = 1;j < i;j++)
+            {
+                dp[i] = max(dp[i],max(j*(i-j),j*dp[i-j]));//外层的max是取出j为[1,i)时最大值
+            }
+        }
+        return dp[n];
+    }
+};
