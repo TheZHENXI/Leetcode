@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int value = 1000000007;
+    int cuttingRope(int n) 
+    {
+        //(x1+x2+...+xm)/m >= 根号m(x1*x2*...*xm)
+        //当且仅当x1 = x2 = ... xm时，x1*x2*...*xm取得最大值 (n/m)^m
+        //将n分为m份，则x = n/m,f(x) = (x)^m = (x)^(n/x) = (x^(1/x))^n
+        if(n <= 3)
+            return n-1;
+        int a = n/3,b = n%3;
+        long res = 1;
+        for(int i = 1;i < a;i++)
+        {
+            res = res*3 % value;
+        }
+        if(b == 0)
+            res = res * 3 % value;
+        if(b == 1)
+            res = res * 4 % value;
+        if(b == 2)
+            res = res* 3 * 2 % value;
+        
+        return  res;
+    }
+};
