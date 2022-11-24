@@ -1,6 +1,4 @@
-/*
- * Note: The returned array must be malloced, assume caller calls free().
- */
+
  //暴力解法：时间复杂度O(N^2),空间复杂度O(1)
 int* twoSum(int* nums, int numsSize, int target, int* returnSize)
 {
