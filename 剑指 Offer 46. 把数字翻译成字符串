@@ -1,0 +1,36 @@
+
+class Solution {
+public:
+    int translateNum(int num) 
+    {
+        /*
+        1 
+        1 2 | 12
+        1 2 2| 12 2 | 1 22
+        1 2 2 5 | 12 2 5 | 1 22 5 | 1 2 25 | 12 25
+        bccfi     mcf      bwf     bcz        mz
+        [      来自上一行     ]     [  来上上行  ]
+        */
+
+        //状态定义：F(i)表示前i个数字翻译的方法数
+        //如果第i个不能够和第i-1个元素组成字符
+        //F(i) = F(i-1)
+        //如果第i个能够和第i-1个元素组成字符
+        //F(i) = F(i-1) + F(i-2)
+        //初始化：F(0)为辅助元素，没有时间意义
+        string str = to_string(num);
+        int len = str.length();
+        vector<int> numbers(len+1,1);
+        for(int i = 2;i <= len;i++)
+        {
+            int a = (str[i-2] - 48)*10 ;
+            int b = (str[i-1] - 48);
+            int tmp = a + b;
+            if(tmp < 26 && a)
+                numbers[i] = numbers[i-1] + numbers[i-2];
+            else
+                numbers[i] = numbers[i-1];
+        }
+        return numbers[len];
+    }
+};
