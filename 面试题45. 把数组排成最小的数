@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string minNumber(vector<int>& nums) 
+    {
+        vector<string> str;
+        string ret;
+        //将nums中的元素都转换成字符串
+        for(int num:nums)
+        {
+            str.push_back(to_string(num));
+        }
+        //将转换后的字符串排序
+        sort(str.begin(),str.end(),[](string& x, string& y){ return x + y < y + x; });
+        //加到ret后返回
+        for(string s:str)
+        {
+            ret.append(s);
+        }
+        return ret;
+    }
+};
