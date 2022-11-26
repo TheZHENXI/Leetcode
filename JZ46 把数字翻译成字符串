@@ -1,0 +1,46 @@
+
+class Solution {
+public:
+    int solve(string nums) 
+    {
+        /*
+        1 
+        1 2 | 12
+        1 2 2| 12 2 | 1 22
+        1 2 2 5 | 12 2 5 | 1 22 5 | 1 2 25 | 12 25
+        bccfi     mcf      bwf     bcz        mz
+        [      来自上一行     ]     [  来上上行  ]
+        */
+
+        //状态定义：F(i)表示前i个数字翻译的方法数
+        //如果第i个不能够和第i-1个元素组成字符
+        //F(i) = F(i-1)
+        //如果第i个能够和第i-1个元素组成字符
+        //F(i) = F(i-1) + F(i-2)
+        //初始化：F(0)为辅助元素，没有时间意义
+        if(nums == "0")
+            return 0;
+        if(nums == "10" || nums == "20")    
+            return 1;
+        int len = nums.length();
+        //当0的前面不是1或2时，0种
+        for(int i = 1; i < nums.length(); i++)
+        { 
+            if(nums[i] == '0')
+                if(nums[i - 1] != '1' && nums[i - 1] != '2')
+                    return 0;
+        }
+        vector<int> numbers(len+1,1);
+        for(int i = 2;i <= len;i++)
+        {
+            int a = (nums[i-2] - 48)*10 ;
+            int b = (nums[i-1] - 48);
+            int tmp = a + b;
+            if(tmp < 27 && a && b) //十位不为0，且个位不为0 的情况下才可以11~19 21~26
+                numbers[i] = numbers[i-1] + numbers[i-2];
+            else
+                numbers[i] = numbers[i-1];
+        }
+        return numbers[len];
+    }
+};
