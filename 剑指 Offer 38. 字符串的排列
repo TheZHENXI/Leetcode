@@ -1,0 +1,39 @@
+class Solution {
+public:
+    void DFS(vector<string> &Solutions,string &Solution,string &s,
+    int index,int len,vector<int> &visited)
+    {
+        if(index == len)
+        {
+            Solutions.push_back(Solution);
+            return;
+        }
+        for(int i = 0;i < len;i++)
+        {
+            //去重：前一个重复的没用使用的情况下
+            if(i > 0 && s[i-1] == s[i] && visited[i-1] == 0)
+                continue;
+            //将当前字符放入，并继续DFS剩下的
+            if(visited[i] == 0)
+            {
+                visited[i] = 1;
+                Solution.push_back(s[i]);
+                DFS(Solutions,Solution,s,index+1,len,visited);
+                visited[i] = 0;
+                Solution.pop_back();
+            }
+        }
+    }
+
+    vector<string> permutation(string s) 
+    {
+        int len = s.length();
+        vector<string> Solutions;
+        string Solution;
+        vector<int> visited(len,0);
+        sort(s.begin(),s.end());
+        DFS(Solutions,Solution,s,0,len,visited);
+
+        return Solutions;
+    }
+};
