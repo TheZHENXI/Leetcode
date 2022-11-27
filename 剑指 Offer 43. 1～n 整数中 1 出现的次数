@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int countDigitOne(int n) 
+    {
+        //310 5 293
+        //当前位 >1: (a+1)*base
+        //当前位==1: (a*base)+(b+1)
+        //当前位 <1:  a*base
+        int ret = 0;
+        long base = 1;
+        while(base <= n)
+        {
+            int a = n/base/10;
+            int b = n%base;
+            int cur = n/base%10;
+
+            if(cur > 1) ret += (a+1)*base;
+            else if(cur == 1) ret += (a*base) + (b+1);
+            else ret += a*base;
+
+            base *= 10;
+        }
+        return ret;
+
+    }
+};
