@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int lastRemaining(int n, int m) 
+    {   
+        //约瑟夫环问题 
+        // F(n,m) 表示前n个数字从0位置开始数删除第m个数字之后剩余的数
+        //状态转移方程：F(n,m) = (F(n-1,m) + m) % n
+        int ret = 0;
+        for(int i = 1;i <= n;i++)
+        {
+            ret = (ret + m) % i;
+        }
+        return ret;
+    }
+};
