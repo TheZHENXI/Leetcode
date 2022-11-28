@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int MergeSort(vector<int>& nums,int left,int right,vector<int>& tmp,int& cnt)
+    {
+        if(left >= right)
+            return 0;
+        
+        int mid = (left + right)/2;
+        MergeSort(nums,left,mid,tmp,cnt);
+        MergeSort(nums,mid+1,right,tmp,cnt);
+
+        int index = left;
+        int begin1 = left,end1 = mid;
+        int begin2 = mid + 1,end2 = right;
+        while(begin1 <= end1 && begin2 <= end2)
+        {
+            if(nums[begin1] <= nums[begin2])
+                tmp[index++] = nums[begin1++];
+            else
+            {
+                tmp[index++] = nums[begin2++]; 
+                cnt += (end1-begin1+1);
+            }
+        }
+        while(begin1 <= end1)
+        {
+            tmp[index++] = nums[begin1++];
+        }
+        while(begin2 <= end2)
+        {
+            tmp[index++] = nums[begin2++];
+        }
+        //将排序数组tmp 拷贝到nums数组
+        for(int i = left;i <= right;i++)
+        {
+            nums[i] = tmp[i];
+        }
+
+        return cnt;
+    }
+
+    int reversePairs(vector<int>& nums) 
+    {
+        int len = nums.size();
+        if(len == 0)
+            return 0;
+        vector<int> tmp(nums);
+        int cnt = 0;
+        return MergeSort(nums,0,len-1,tmp,cnt);
+    }
+};
