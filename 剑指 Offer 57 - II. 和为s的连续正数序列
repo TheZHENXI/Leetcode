@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<vector<int>> findContinuousSequence(int target) 
+    {
+
+        vector<vector<int>> Solutions;
+        vector<int> Solution;
+        if(target == 1)
+            return Solutions;
+        int l = 1,r = 2,sum = 0;
+        while(l < r) //区间存在
+        {
+            //计算[r,l]之间的元素和，等差数列求和Sn = (n(A1+An))/2
+            sum = (r+l)*(r-l+1)/2;
+            //相等，则将现在的区间元素保存到返回数组
+            if(sum == target)
+            {
+                Solution.clear();
+                for(int i = l;i <= r;i++)
+                {
+                    Solution.push_back(i);
+                }
+                Solutions.push_back(Solution);
+                l++;  //以元素为起点的序列已经验证，换下一元素为起点
+            }
+            //和小，则向右扩展边界，增大sum
+            else if(sum < target)
+                r++;
+            //和大，则左边界移动，减小sum
+            else
+                l++;
+        }
+        return Solutions;
+    }
+};
