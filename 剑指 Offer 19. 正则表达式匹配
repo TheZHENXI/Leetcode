@@ -1,0 +1,47 @@
+class Solution {
+public:
+    //问题分析：
+    bool isMatch(string s, string p) 
+    {
+        //F(i,j) 表示s的前i个字符与p的前j个字符是否匹配
+        int row = s.length(),col = p.length();
+        //初始化
+        vector<vector<bool>> res(row+1,vector<bool>(col+1,false));
+        res[0][0] = true;//辅助状态
+        for(int j = 2;j <= col;j++)
+        {
+            if(p[j-1] == '*')
+                res[0][j] = res[0][j-2];
+            else
+                res[0][j] = false;
+        }
+
+        //状态转移,i/j表示的前i个，前j个
+        for(int i = 1;i <= row;i++)
+        {
+            for(int j = 1;j <= col;j++)
+            {
+                if(isalpha(p[j-1]))
+                {
+                    if(s[i-1] == p[j-1])
+                        res[i][j] = res[i-1][j-1];
+                    else
+                        res[i][j] = false;
+                }
+                else if(p[j-1] == '*') //重点难点
+                {
+                    //不匹配(0次)，扔掉"a*"组合
+                    res[i][j] = res[i][j - 2]; 
+                    //如果可以继续匹配字母，'*'前字母必须匹配s末尾字母
+                    if(s[i-1] == p[j-2] or p[j-2] == '.') 
+                    { 
+                        res[i][j] = res[i][j-2] | res[i - 1][j]; //不匹配 or 匹配
+                    }
+                }
+                else
+                    res[i][j] = res[i-1][j-1];
+            }
+        }
+        return res[row][col];
+    }
+};
