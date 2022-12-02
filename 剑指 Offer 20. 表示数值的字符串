@@ -1,0 +1,79 @@
+
+class Solution {
+public:
+    void trim(string &s) 
+    {
+        s.erase(0,s.find_first_not_of(" "));
+        s.erase(s.find_last_not_of(" ") + 1);
+    }
+    bool isNumeric(string s) 
+    {
+        //去除前后空格
+        trim(s);
+        //去除前面的正负号
+        if(s[0] == '+' || s[0] == '-')
+            s = s.substr(1);
+        //寻找e，将字符串分割为两部分
+        int len = s.length();
+        int E_index = -1;
+        for(int i = 0;i < len;i++)
+        {
+            if(s[i] == 'e' || s[i] == 'E')
+            {
+                E_index = i;
+                break;
+            }
+        }
+        //E或则e存在
+        if(E_index >= 0)
+        {   //3.14E5
+            string first = s.substr(0,E_index);
+            string second = s.substr(E_index+1);
+            if(second.length() > 0 && second[0] == '+' || second[0] == '-')
+                second = second.substr(1);
+            return isValidNumber(first) && isValidPureNumber(second);
+        }
+        //不存在e/E
+        return isValidNumber(s);
+    }
+
+    //判断有效串(数字 与 . )
+    bool isValidNumber(string str)
+    {
+        int idx = -1;
+        for(int i = 0;i < str.length();i++)
+        {
+            if(str[i] == '.')
+            {
+                idx = i;
+                break;
+            }
+        }
+        if(idx >= 0)
+        {
+            string first = str.substr(0,idx);
+            string second = str.substr(idx+1);
+            if(first.length() > 0 && second.length() > 0)
+                return isValidPureNumber(first) && isValidPureNumber(second);
+            else if(first.length() == 0 && second.length() > 0)
+                return isValidPureNumber(second);
+            else
+                return isValidPureNumber(first);
+        }
+        return isValidPureNumber(str);
+    }
+    //判断是否为纯数字串
+    bool isValidPureNumber(string str)
+    {
+        int len = str.length();
+        if(len == 0)
+            return false;
+        for(int i = 0;i < len;i++)
+        {
+            if(str[i] < '0' || str[i] > '9')
+                return false;
+        }
+        return true;
+    }
+
+};
