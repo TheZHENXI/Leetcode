@@ -20,4 +20,5 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize)
     return ret;
 }
 //哈希表法（暂缓在写）：第一遍遍历将nums数组的元素作为hash的key，nums的序号作为val；
-//第二遍遍历：用target-nums[i]，然后在hash数组中寻找是否存在。
+//第二遍遍历：用target-nums[i]，然后在hash数组中寻找是否存在
+
